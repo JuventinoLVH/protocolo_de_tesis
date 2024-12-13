@@ -1,0 +1,230 @@
+%%%%%%%%%%%%%%%%%%%%%%% file typeinst.tex %%%%%%%%%%%%%%%%%%%%%%%%%
+% VINSTITUTO POLITÉCNICO NACIONAL
+% CENTRO DE INVESTIGACIÓN EN COMPUTACIÓN
+% PROTOCOLO PARA REGISTRO DE TEMA DE TESIS
+% MAESTRÍA EN CIENCIAS DE LA COMPUTACIÓN
+% MAESTRÍA EN CIENCIAS EN INGENIERÍA DE CÓMPUTO
+% SEMESTRE B22
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[runningheads,a4paper]{llncs}
+
+\usepackage[utf8]{inputenc}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{biblatex}
+\usepackage{geometry}
+    \geometry{
+    a4paper,
+    total={170mm,257mm},
+    left=20mm,
+    top=20mm,
+}
+
+\newcommand{\keywords}[1]{\par\addvspace\baselineskip
+\noindent\keywordname\enspace\ignorespaces#1}
+
+\begin{document}
+
+\title{
+    Generadores de Señales de Reloj Para Procesadores SoC
+}
+
+\author{
+    Luis Juventino Velasquez Hidalgo,\\
+    M.Osvaldo Espinosa Sosa,\\
+    Dr. Victor Hugo Ponce Ponce
+}
+
+\urldef{\mailsa}\path|lvelasquezh2024@cic.ipn.mx|
+\urldef{\mailsb}\path|{vponce@cic.ipn.mx, espinosa@cic.ipn.mx}@cic.ipn.mx|    
+\institute{
+    Centro de Investigación en Computación\\
+    Av. Juan de Dios Bátiz, esq. M
+    guel Othón de Mendizábal\\
+    Col. Nueva Industrial Vallejo, Alcaldía Gustavo A. Madero, C.P. 07738, CDMX\\
+    Unidad Profesional Adolfo López Matéos (Zacaténco)\\
+    \mailsa\\
+    \mailsb\\
+    \url{http://www.cic.ipn.mx}
+}
+\maketitle
+
+\begin{abstract} 
+    Las señales de reloj son fundamentales para el funcionamiento de todos los procesadores. Este trabajo explora la creacion de una señal de reloj digital utilizando un \textit{Phase-lock loop} \textbf{(PLL)}. 
+
+    El area de \textit{System on Chip} \textbf{(SoC)} es un campo muy cerrado, pero es un campo muy amplio y requerido para distintas aplicaciones. Por lo que uno de los objetivos del presente trabajo es diseñar el PLL en un lenguaje de descripción de hardware para generar una referencia de dichas tecnologias.
+
+    \keywords{FPGA, SoC, Sistemas Embebidos, Microprocesadores, PLL, Microtecnologias}
+\end{abstract}
+
+\section{Introducción}
+
+    Un procesador es un circuito integrado encargado de ejecutar instrucciones y procesar datos en un sistema informático. Se le llama SoC a un dispositivo que integra todos los componentes esenciales de un sistema, por ejemplo; memoria, controladores, procesador y otros bloques funcionales. El avance de las microtecnologías ha echo que para concretar el diseño de un SoC sea necesario usar un \textit{hardware description language} \textbf{(HDL)} para describir el comportamiento del sistema en lugar de describir la circuitería necesaria.
+
+    El reloj es uno de los componente principales en le diseño de SoC's. El reloj se encarga de generar señales periódicas estables esenciales para coordinar todos los componentes del sistema. La linea de investigación de la propuesta de tesis está encaminada al desarrollo de un reloj integrable a un SoC.\\
+
+   En los SoC los relojes usualmente se implementa usando sensores \textit{On-chip}, generadores de reloj \textit{On-chip} o haciendo uso de PLL's siendo estos últimos en los que se enfoca la propuesta de tesis. El principal problema es que el ecosistema de desarrollo en HDL es muy cerrado y es común que los componentes individuales no sean transparentes. La propuesta de está tesis es \textbf{crear un diseño de reloj en HDL} para uso general y de acceso libre.\\
+
+    Un PLL se evalúa principalmente con dos metricas: \textit{jitter} y \textit{Phase noise} (Ruido de fase). Como la finalidad del PLL es fungir como reloj, a estas metricas se le añade la frecuencia maxima.
+    El jitter; ocasionalmente referido como \textit{time interval error}, es una medida estadística de la desviación entre los flancos de la señal cuadrada ideal comparado con la señal real. Al ser una medida estadística se necesita de un muestreo a partir del cual se caracteriza al jitter y poder calcular, por ejemplo; la desviación máxima, el promedio aritmético de la desviación y la desviación del promedio. Por otro, el ruido de fase es una varianza en la magnitud horizontal de la onda. A diferencia del ruido aditivo el cual solo afecta a la amplitud de la onda, la varianza horizontal puede cambiar el periodo de la señal deseada.
+
+    En un articulo publicado en el 2022${}^5$ se reseñaron en total 144 publicaciones de la \textit{ISSCC} y \textit{VLSI}, dando como resultado que 38\% de las publicaciones hablan de \textit{ADPLL}, 15\% sobre \textit{SSPLL},18\% de \textit{ILPLL} , 7\% de \textit{MDLL} y el 22\% restante de otros diseños.
+    Uno de los resultados que se obtuvo en el articulo mencionado es que los avances en el diseño de PLL se pueden dividir en 3 categorías: aumentar la frecuencia conservando el consumo de energía, aumentar la frecuencia manteniendo la relación de frecuencia-consumo de energía, aumentar la frecuencia manteniendo el jitter normalizado
+    
+    Cada problema que necesite una implementación requiere especificaciones diferentes. Sera trabajo de la tesis definir si el reloj estará enfocado a un uso especifico o a uno más general y bajo que condiciones otra tecnología se adaptaría mejor al problema.
+
+% TODO Hablar de Jitter y phase noise. Resultados de implementaciones recientes y problemas de estos. Buscar que problema se quiere solucionar o una implementacion teorica que pueda llevar a cabo
+
+% NOTE Definir el problema que las soluciones actuales tienen e identificar como se trata de solucionar cada problema, Identificar puntos cientificamente debiles que planteen nuevas ramas de investigación   
+
+\section{Características y generalidades}
+HOOLA
+
+%Describir como se resuelve el problema a priori.
+%Esquema de trabajo
+% 'se tiene que ver claramente qué de nuevo se va a realizar con respecto a lo que ya se ha hecho Definir productos y entregables, asi como derivados'
+
+\subsection{Objetivo General:}
+\paragraph{Diseñar un reloj en lenguaje DHL}
+\paragraph{Investigar las diferentes tecnologías en el diseño de PLL e identificar sus ventajas y casos de uso}
+\paragraph{Investigar arquitecturas para integrar un reloj en circuitos SoC}
+
+\subsection{Objetivos específicos:}
+\paragraph{Integrar la señal del reloj con otros periféricos o circuitos. Por ejemplo, el procesador lagarto}
+\paragraph{Caracterizar el reloj echo midiendo su frecuencia máxima, jitter y ruido de fase}
+\paragraph{Caracterizar el reloj echo midiendo su frecuencia máxima, jitter y ruido de fase}
+
+
+\subsection{Índice tentativo de la tesis:}
+\begin{itemize}
+\item Introduccion
+\item Necesidades de un SoC
+\item Fundamentos de un PLL
+\item Diseño tradicional de PLL's
+\item Nuevas tecnologias en el diseño de PLL's
+\begin{itemize}
+    \item ADPLL
+    \item SSPLL
+    \item ILPLL
+    \item MDLL
+\end{itemize}
+\item Resultado de la implementacion
+\item Conclusiones
+\end{itemize}
+
+\section{Aspectos importantes a destacar del trabajo de tesis}
+Apoyarse del director de tesis para responder.
+
+\begin{itemize}
+\settowidth{\leftmargin}{{\Large$\circ$}}\advance\leftmargin\labelsep
+\itemsep8pt\relax
+\renewcommand\labelitemi{{\lower1.5pt\hbox{\Large$\circ$}}}
+ \item Indicar al menos 3 aspectos del porqué la investigación a realizar es relevante para el grupo de trabajo (laboratorio) al cual se integrará. Esto es, será parte de investigaciones actualmente realizándose o es una investigación reciente o es una investigación aislada; entre otras, explicar.
+ \item Si el trabajo a realizar ya se ha hecho con antelación en el CIC, en qué cambia científicamente, cuál es la diferencia. Reutilizará software o empezará desde cero.
+
+ \end{itemize}
+Aclarar cual es el perfil que al final del trabajo adoptará el alumno (científico o tecnológico).
+
+\section{Plan de trabajo y cronograma}
+
+Enumere y describa sucintamente las acciones y actividades que desarrollará para lograr los objetivos propuestos, así como los productos que se generarán como fruto del desarrollo de las actividades. 
+\begin{table}
+\begin{center}
+ \begin{tabular}{|c|c|c|}
+\hline\noalign{\smallskip}
+Consecutivo & Actividades o acciones a desarrollar & Productos Esperados\\
+\noalign{\smallskip}
+\hline
+\noalign{\smallskip}
+ &  &  \\\hline
+ &  &  \\\hline
+ &  &  \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\subsection{Plan de estudios }
+Debe señalar los meses estimados de inicio y término de cada una de las actividades descritas en el plan de trabajo, a partir de la fecha de presentación de esta solicitud.
+
+\begin{table}
+\begin{center}
+ \begin{tabular}{|c|c|c|}
+\hline\noalign{\smallskip}
+ & PRIMER A\~NO & SEGUNDO A\~NO\\
+\noalign{\smallskip}
+\hline\noalign{\smallskip}
+Actividad & \begin{tabular}{c|c|c|c|c|c}
+            ene & feb & mar & abr & may & jun\\
+            \end{tabular}
+				    & \begin{tabular}{c|c|c|c|c|c|c|c|c|c|c|c}
+				    jul & ago & sep & oct & nov & dic & ene & feb & mar & abr & may & jun\\
+				    \end{tabular}\\\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\section{Recursos requeridos de hardware y software}
+
+
+\section{Estancia de investigación}
+% Me gustaria irme de estancia, pero no estoy seguro de como ponerlo
+
+\section{Plan de UA que cursará}
+\begin{table}
+\begin{center}
+ \begin{tabular}{|l|l|}
+Primer Semestre & Segundo Semestre\\
+1. Matemáticas para las ciencias de la computación & 1.\\
+2. Probabilidad, procesos aleatorios e inferencia & 2.\\
+3. Teoría de la Computación & 3.\\ 
+4. Procesamiento digital de señales & 4.\\ 
+5. Procesamiento digital de señales & 5. Tema de tesis\\ 
+6. Seminario  \\
+\hline\noalign{\smallskip}
+Tercer Semestre & Cuarto Semestre\\
+1. & 1. Tema de tesis\\
+2. & \\
+3. & \\
+4. Seminario III& \\
+5. Tema de tesis & \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\section{Comité tutorial propuesto}
+\begin{itemize}
+\item M. Osvaldo Espinosa Sosa
+\item Dr. Victor Hugo Ponce Ponce
+\item Dr. Hector Báez Medina
+\item Dr. Herón Molina Lozano
+ \end{itemize}
+
+
+\section{Retribución social}
+
+
+\section{NOTA ACLARATORIA}
+El presente documento es representativo de que tanto el alumno, así como el(los) director(es) de tesis están de acuerdo en trabajar conjuntamente para cumplir los objetivos planteados en el mismo, quedando claro que el contenido de éste es pieza sustentante de las labores a desarrollar por ambas partes y que al momento de ser entregado a la coordinación del programa, queda de conformidad su desarrollo por los involucrados. Considerando además que la planeación presentada emana de una propuesta por parte del o los director(es) de tesis y es un trabajo a desarrollar por el asesorado cuya labor se considera como un recurso humano de apoyo a un investigador.
+
+%\section*{References}
+
+%\begin{thebibliography}{4}
+%    \bibitem{jour} Brackenbury, L. E. M., Plana, L. A., & Pepper, J. (2010). System-on-Chip Design and Implementation. IEEE Transactions on Education, 53(2), 272–281. doi:10.1109/te.2009.2014858 en \url{https://ieeexplore.ieee.org/abstract/document/5196691?casa_token=TpI81j-CHq4AAAAA:ILb9l6GoYXNWQbEPythUCDtK5P1gD1r4HOItcKHaa1guUkdviQkCzPEXMteGrnGGqSA2KhfANXdP}
+%
+%    \bibitem{jour} Lech Jóźwiak(2001), Quality-driven design in the system-on-a-chip era: Why and how?, Journal of Systems Architecture en \url{https://www.sciencedirect.com/science/article/pii/S1383762100000461?casa_token=A_tME0kkXqAAAAAA:kexFmDn0pCK5R-u1-8HtNg5OipAboKdQQhrSq3JXLFyNBPwSGPyhPnqJm5v44uHy2IDGlExRLkVd}
+%
+%    \bibitem{jour} Chakravarthi, V. S. (2022). A practical approach to VLSI system on chip (SoC) design A practical approach to VLSI system on chip (SoC) design (2nd ed.). doi:10.1007/978-3-031-18363-8 en \url{https://link.springer.com/book/10.1007/978-3-031-18363-8}
+%
+%    \bibitem{jour} Fahim, A. (2004). Clock generators for SOC processors [PDF]. doi:10.1007/b117041 en \url{https://link.springer.com/book/10.1007/b117041}
+%
+%    \bibitem{jour} Bae, W. (2022). Benchmark figure of merit extensions for low jitter phase locked loops inspired by new PLL architectures. IEEE Access: Practical Innovations, Open Solutions, 10, 80680–80694. doi:10.1109/access.2022.3195687 en \url{https://ieeexplore.ieee.org/abstract/document/9847207}
+%
+%    \bibitem{jour}  en \url{}
+%
+%\end{thebibliography}
+%\printbibliography
+
+\end{document}
