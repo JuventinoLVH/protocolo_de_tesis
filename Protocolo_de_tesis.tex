@@ -10,9 +10,12 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage{amssymb}
+\usepackage{pgfgantt}
 \usepackage{graphicx}
 \usepackage{url}
 \usepackage{biblatex}
+\usepackage{graphicx}
+\graphicspath{ {./} }
 \usepackage{geometry}
     \geometry{
     a4paper,
@@ -60,18 +63,29 @@
 
 \section{Introducción}
 
-    Un procesador es un circuito integrado encargado de ejecutar instrucciones y procesar datos en un sistema informático. Se le llama SoC a un dispositivo que integra todos los componentes esenciales de un sistema, por ejemplo; memoria, controladores, procesador y otros bloques funcionales. El avance de las microtecnologías ha echo que para concretar el diseño de un SoC sea necesario usar un \textit{hardware description language} \textbf{(HDL)} para describir el comportamiento del sistema en lugar de describir la circuitería necesaria.
+Un procesador es un circuito integrado encargado de ejecutar instrucciones y procesar datos en un sistema informático. Se le llama SoC a un dispositivo que integra todos los componentes esenciales de un sistema, por ejemplo; memoria, controladores, procesador y otros bloques funcionales. El avance de las microtecnologías ha echo que para concretar el diseño de un SoC sea necesario usar un \textit{hardware description language} \textbf{(HDL)}${}^3$ para describir el comportamiento del sistema en lugar de describir la circuitería necesaria.
 
     El reloj es uno de los componente principales en le diseño de SoC's. El reloj se encarga de generar señales periódicas estables esenciales para coordinar todos los componentes del sistema. La linea de investigación de la propuesta de tesis está encaminada al desarrollo de un reloj integrable a un SoC.\\
 
-   En los SoC los relojes usualmente se implementa usando sensores \textit{On-chip}, generadores de reloj \textit{On-chip} o haciendo uso de PLL's siendo estos últimos en los que se enfoca la propuesta de tesis. El principal problema es que el ecosistema de desarrollo en HDL es muy cerrado y es común que los componentes individuales no sean transparentes. La propuesta de está tesis es \textbf{crear un diseño de reloj en HDL} para uso general y de acceso libre.\\
+    En los SoC los relojes usualmente se implementa usando sensores \textit{On-chip}, generadores de reloj \textit{On-chip}${}^1$ o haciendo uso de PLL's siendo estos últimos en los que se enfoca la propuesta de tesis. El principal problema es que el ecosistema de desarrollo en HDL es muy cerrado y es común que los componentes individuales no sean transparentes. La propuesta de está tesis es \textbf{crear un diseño de reloj en HDL} para uso general y de acceso libre.\\
 
-    Un PLL se evalúa principalmente con dos metricas: \textit{jitter} y \textit{Phase noise} (Ruido de fase). Como la finalidad del PLL es fungir como reloj, a estas metricas se le añade la frecuencia maxima.
+   Un PLL se evalúa principalmente con dos metricas: \textit{jitter} y \textit{Phase noise} (Ruido de fase)${}^4$. Como la finalidad del PLL es fungir como reloj, a estas metricas se le añade la frecuencia maxima.
     El jitter; ocasionalmente referido como \textit{time interval error}, es una medida estadística de la desviación entre los flancos de la señal cuadrada ideal comparado con la señal real. Al ser una medida estadística se necesita de un muestreo a partir del cual se caracteriza al jitter y poder calcular, por ejemplo; la desviación máxima, el promedio aritmético de la desviación y la desviación del promedio. Por otro, el ruido de fase es una varianza en la magnitud horizontal de la onda. A diferencia del ruido aditivo el cual solo afecta a la amplitud de la onda, la varianza horizontal puede cambiar el periodo de la señal deseada.
 
     En un articulo publicado en el 2022${}^5$ se reseñaron en total 144 publicaciones de la \textit{ISSCC} y \textit{VLSI}, dando como resultado que 38\% de las publicaciones hablan de \textit{ADPLL}, 15\% sobre \textit{SSPLL},18\% de \textit{ILPLL} , 7\% de \textit{MDLL} y el 22\% restante de otros diseños.
     Uno de los resultados que se obtuvo en el articulo mencionado es que los avances en el diseño de PLL se pueden dividir en 3 categorías: aumentar la frecuencia conservando el consumo de energía, aumentar la frecuencia manteniendo la relación de frecuencia-consumo de energía, aumentar la frecuencia manteniendo el jitter normalizado\\
-    
+
+    Existen muchas implementaciones de PLL, pero los componentes fundamentales son; el \textit{Error detector} compuesto por un detector de frecuencia de fase y un regulador de voltaje, un \textit{Loop Filter} para suavizar la señal de error generado por el \textit{Error detector}, un \textit{Voltage-controlled oscillator} (\textbf{VCO}) encargado de ajustar la frecuencia en función de la señal de error del \textit{Error detector} para compararla con la señal deseada y un \textit{feedback divider} encargado de regular la señal del \textit{VCO} para que este en la misma fase y frecuencia que la señal de referencia.\\ 
+
+
+\begin{figure}[t]
+\includegraphics[width=8cm]{PLL.png}
+\centering
+\caption{Arquitectura base de un PLL. Rescatado de${}^6$}
+\end{figure}
+
+    De la arquitectura base se desprenden implementaciones como en ${}^7$ la cual añade; para la implementación de un SoC, un control de voltaje antes del \textit{VCO} para disminuir el efecto del ruido generado por todos los componentes digitales existentes en el chip. Aumentando el consumo de energía pero reduciendo el jitter.
+
     Cada problema que necesite una implementación requiere especificaciones diferentes. Sera trabajo de la tesis definir si el reloj estará enfocado a un uso especifico o a uno más general y bajo que condiciones otra tecnología se adaptaría mejor al problema. Una de los factores que afectan el rendimiento del reloj en un SoC es la distribución del mismo, al trabajar con frecuencias muy altas la frecuencia llega con un desface diferente en cada dispositivo, es por eso que hay distintas arquitecturas para la correcta distribuccion de la señal de reloj, por ejemplo: \textit{ring clock},\textit{tree-clock} y \textit{mesh clock}. Es trabajo de la tesis saber con que arquitectura se acomoda mejor el reloj diseñado\\
 
 
@@ -81,6 +95,7 @@ Cada implementación de un SoC está caracterizado por un conjunto de restriccio
 
 Para poder cumplir con las métricas necesarias del reloj se han desarollado las tecnicas ya mencionadas, las cuales son: \textit{ADPLL}, \textit{SSPLL}, \textit{ILPLL} y \textit{MDLL}. También ha sido necesario desarrollar en la arquitectura necesaria para llevar la señal de reloj a cada componente del SoC, como las ya mencionadas: \textit{ring clock}, \textit{tree clock} y {mesh clock}. Es prudente mencionar que algunas técnicas de PLL se integran mejor a arquitecturas especificas, como lo es el SSPLL con el \textit{ring clock} . El entregable propuesto es el diseño de un PLL y su implementación en una arquitectura SoC pensando en las necesidades más generales de un sistema: integración de cpu , memoria y puertos perifericos, bajo consumo de energía, bajo costo de producción, tamaño reducido y respuesta en tiempo real. 
 
+La relevancia de dicho trabajo radica en la necesidad de generar el conocimiento de cómo diseñar SoC's, siendo la integración del reloj el primer paso del proceso. Dicha integración implica un estudio para relacionar las necesidades del SoC con el diseño del PLL. 
 
 %Describir como se resuelve el problema a priori.
 %Esquema de trabajo
@@ -137,18 +152,21 @@ Al finalizar la tesis, el alumno deberá ser capas de; dado un problema, identif
 Enumere y describa sucintamente las acciones y actividades que desarrollará para lograr los objetivos propuestos, así como los productos que se generarán como fruto del desarrollo de las actividades. 
 \begin{table}
 \begin{center}
- \begin{tabular}{|c|c|c|}
+\begin{tabular}{|p{2cm}|p{5cm}|p{5cm}|} 
 \hline\noalign{\smallskip}
 Consecutivo & Actividades o acciones a desarrollar & Productos Esperados\\
 
 \noalign{\smallskip}
 \hline
 \noalign{\smallskip}
-1& Investigar hacerca de PLL y arquitecturas SoC & Simulación de un reloj \\\hline
-2& Implementar el reloj en fisico & Un reloj funcionando en una placa de desarollo \\\hline
-3& Investigar un problema que se pueda resolver con un SoC & El diseño de un SoC \\\hline
-4& Implementar el SoC en una placa de desarrollo, usando el reloj diseñado & Un SoC en una placa de desarollo  \\
-\hline
+1& Hacer un estudio de las técnicas existentes para implementar circuitos PLL & Una tabla comparativa con las ventajas, desventajas y especificaciones de cada circuito \\\hline
+2&Diseñar las versiones digital y analógica del circuito PLL & Diseño conceptual de cada reloj \\\hline
+3&Utilizar software de diseño y simulación para obtener las versiones de los circuitos PLL & Diseños en HDL de los circuitos\\\hline
+4&Implementar el PLL en una placa de desarrollo & Un PLL funcional integrado a una placa de desarollo \\\hline
+5&Obtener el lay-out de los circuitos propuestos & Diseño del PLL en una placa fisica \\\hline
+6&Hacer análisis de los circuitos obtenidos & Conclusiones preliminares de la tesis\\\hline
+7&Escritura de la tesis & La tesis \\\hline
+8&Presentación del examen de puerta cerrada. & Evaluación de las conclusiones mostradas en la tesis \\\hline
 \end{tabular}
 \end{center}
 \end{table}
@@ -156,56 +174,59 @@ Consecutivo & Actividades o acciones a desarrollar & Productos Esperados\\
 \subsection{Plan de estudios }
 Debe señalar los meses estimados de inicio y término de cada una de las actividades descritas en el plan de trabajo, a partir de la fecha de presentación de esta solicitud.
 
-\begin{table}
-\begin{center}
- \begin{tabular}{|c|c|c|}
-\hline\noalign{\smallskip}
- & PRIMER A\~NO & SEGUNDO A\~NO\\
-\noalign{\smallskip}
-\hline\noalign{\smallskip}
-Actividad & 
-    \begin{tabular}{c|c|c|c|c|c}
-        ene & feb & mar & abr & may & jun\\
-    \end{tabular} &
-    \begin{tabular}{c|c|c|c|c|c|c|c|c|c|c|c}
-        jul & ago & sep & oct & nov & dic & ene & feb & mar & abr & may & jun\\
-    \end{tabular}\\\hline
+\begin{ganttchart}[
+canvas/.append style={fill=none, draw=black!5, line width=.75pt},
+hgrid style/.style={draw=black!5, line width=.75pt},
+vgrid={*1{draw=black!5, line width=.75pt}},
+today=1,
+today rule/.style={
+draw=black!64,
+dash pattern=on 3.5pt off 4.5pt,
+line width=1.5pt
+},
+today label font=\small\bfseries,
+title/.style={draw=none, fill=none},
+title label font=\bfseries\footnotesize,
+title label node/.append style={below=7pt},
+include title in canvas=false,
+bar label font=\mdseries\small\color{black!70},
+bar label node/.append style={left=2cm},
+bar/.append style={draw=none, fill=black!63},
+bar incomplete/.append style={fill=barblue},
+group incomplete/.append style={fill=groupblue},
+group left shift=0,
+group right shift=0,
+group height=.5,
+group peaks tip position=0,
+group label node/.append style={left=.6cm},
+group progress label font=\bfseries\small,
+link/.style={-latex, line width=1.5pt, linkred},
+link label font=\scriptsize\bfseries,
+link label node/.append style={below left=-2pt and 0pt},
+]{1}{19}
+\gantttitle{2do Semestre}{7}
+\gantttitle{3er Semestre}{6}
+\gantttitle{4to Semestre}{6} \\
+\ganttbar[
+]{\textbf{Actividad 1}}{1}{3} \\
+\ganttbar[
+]{\textbf{Actividad 2}}{3}{7} \\
+\ganttbar[
+]{\textbf{Actividad 3}}{6}{12} \\
+\ganttbar[
+]{\textbf{Actividad 4}}{9}{14} \\
+\ganttbar[
+]{\textbf{Actividad 5}}{11}{15} \\
+\ganttbar[
+]{\textbf{Actividad 6}}{14}{17} \\
+\ganttbar[
+]{\textbf{Actividad 7}}{3}{19} \\
+\ganttmilestone{\textbf{Actividad 8}}{19}{19}  \\
 
-1 & 
-    \begin{tabular}{c|c|c|c|c|c}
-        X & X & X & X & X & X \\
-    \end{tabular} &
-    \begin{tabular}{c|c|c|c|c|c|c|c|c|c|c|c}
-        jul & ago & sep & oct & nov & dic & ene & feb & mar & abr & may & jun\\
-    \end{tabular}\\\hline
+\ganttlink[link type=f-s]{bar1}{bar2}
+\ganttlink[link type=f-s]{bar4}{bar5}
+\end{ganttchart}
 
-2 & 
-    \begin{tabular}{c|c|c|c|c|c}
-        ene & feb & mar & abr & X & X\\
-    \end{tabular} &
-    \begin{tabular}{c|c|c|c|c|c|c|c|c|c|c|c}
-        X & X & X & X & nov & dic & ene & feb & mar & abr & may & jun\\
-    \end{tabular}\\\hline
-
-3 & 
-    \begin{tabular}{c|c|c|c|c|c}
-        ene & feb & mar & abr & may & jun\\
-    \end{tabular} &
-    \begin{tabular}{c|c|c|c|c|c|c|c|c|c|c|c}
-        jul & ago & X & X & X & X & X & X & mar & abr & may & jun\\
-    \end{tabular}\\\hline
-
-4 & 
-    \begin{tabular}{c|c|c|c|c|c}
-        ene & feb & mar & abr & may & jun\\
-    \end{tabular} &
-    \begin{tabular}{c|c|c|c|c|c|c|c|c|c|c|c}
-        jul & ago & sep & oct & nov & dic & ene & X & X & X & X & X\\
-    \end{tabular}\\\hline
-
-\end{tabular}
-\end{center}
-\end{table}
 
 \section{Recursos requeridos de hardware y software}
 \begin{itemize}
@@ -284,7 +305,9 @@ El presente documento es representativo de que tanto el alumno, así como el(los
 
     \bibitem{jour} Bae, W. (2022). Benchmark figure of merit extensions for low jitter phase locked loops inspired by new PLL architectures. IEEE Access: Practical Innovations, Open Solutions, 10, 80680–80694. doi:10.1109/access.2022.3195687 en \url{https://ieeexplore.ieee.org/abstract/document/9847207}
 
-    \bibitem{jour}  en \url{}
+    \bibitem{jour} Analog Devices. (2010). Fundamentals of Phase Locked Loops (PLLs) en \url{https://www.analog.com/media/en/training-seminars/tutorials/MT-086.pdf}
+
+    \bibitem{jour} Young, I. A., Greason, J. K., & Wong, K. L. (1992). A PLL clock generator with 5 to 110 MHz of lock range for microprocessors. IEEE Journal of Solid-State Circuits, 27(11), 1599–1607. doi:10.1109/4.165341 en \url{https://ieeexplore.ieee.org/document/165341}
 
 \end{thebibliography}
 \printbibliography
