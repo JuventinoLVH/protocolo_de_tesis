@@ -102,31 +102,46 @@ La relevancia de dicho trabajo radica en la necesidad de generar el conocimiento
 % 'se tiene que ver claramente qué de nuevo se va a realizar con respecto a lo que ya se ha hecho Definir productos y entregables, asi como derivados'
 
 \subsection{Objetivo General:}
-\paragraph{Diseñar un reloj en lenguaje DHL}
-\paragraph{Investigar las diferentes tecnologías en el diseño de PLL e identificar sus ventajas y casos de uso}
-\paragraph{Investigar arquitecturas para integrar un reloj en circuitos SoC e identificar sus casos de uso}
-\paragraph{Identificar posibles implementaciones de un SoC en problemas actuales}
-
+\paragraph{Diseñar un circuito generador de reloj para microprocesador basado en un PLL.}
 \subsection{Objetivos específicos:}
-\paragraph{Integrar la señal del reloj con otros periféricos o circuitos. Por ejemplo, el procesador lagarto}
-\paragraph{Caracterizar el reloj echo midiendo su frecuencia máxima, jitter y ruido de fase}
+\paragraph{Investigar las diferentes tecnologías en el disen˜o de PLL e identificar sus ventajas y desventajas}
+\paragraph{Hacer un estudio comparativo de circuitos PLL analógicos y digitales.}
+\paragraph{Investigar arquitecturas para integrar un reloj en circuitos SoC e identificar sus casos de uso}
+\paragraph{Integrar la sen˜al del reloj con otros periféricos o circuitos, por ejemplo el procesador lagarto}
+\paragraph{Caracterizar el circuito de reloj, midiendo su frecuencia máxima, jitter y ruido de fase}
 
 
 \subsection{Índice tentativo de la tesis:}
 \begin{itemize}
 \item Introduccion
-\item Necesidades de un SoC
-\item Fundamentos de un PLL
-\item Diseño tradicional de PLL's
-\item Arquitecturas reloj en SoC 
-\item Nuevas tecnologias en el diseño de PLL's
+\item Capítulo 1
 \begin{itemize}
-    \item ADPLL
-    \item SSPLL
-    \item ILPLL
-    \item MDLL
+    \item Antecedentes
+    \item Planteamiento del problema
+    \item Objetivos
+    \item Trabajos relacionados
 \end{itemize}
-\item Implementación y rendimiento de un SoC
+\item Capítulo 2
+\begin{itemize}
+    \item Estado del arte
+    \item Nuevas tecnologias en el diseño de PLL's
+    \item \textbf{ADPLL}
+    \item \textbf{SSPLL}
+    \item \textbf{ILPLL}
+    \item \textbf{MDLL}
+\end{itemize}
+\item Capítulo 3
+\begin{itemize}
+    \item Diseño del circuito PLL digital
+\end{itemize}
+\item Capítulo 4
+\begin{itemize}
+    \item Diseño del circuito PLL analogico
+\end{itemize}
+\item Capítulo 5
+\begin{itemize}
+    \item Pruebas y resultados
+\end{itemize}
 \item Conclusiones
 \end{itemize}
 
@@ -232,7 +247,12 @@ link label node/.append style={below left=-2pt and 0pt},
 \begin{itemize}
 \item Computadora de desarrollo
 \item Software de desarrollo de HDL
-\item Placa de desarrollo
+\begin{itemize}
+    \item Quartus (herramienta EDA para circuitos digitales)
+    \item ModelSim (Simulador digital)
+    \item CADENCE Virtuoso (herramienta de diseño y simulación analógica) 
+ \end{itemize}
+\item Placa de desarrollo Terasic DE115 para familia Cyclone IV de FPGA’s
  \end{itemize}
 
 
