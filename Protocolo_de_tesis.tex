@@ -65,7 +65,7 @@ Un procesador es un circuito encargado de ejecutar instrucciones y procesar dato
 
 
 
-    En los SoC los relojes usualmente se implementa usando osciladores externos generadores de reloj \textit{On-chip} o haciendo uso de PLL's${}^1$ siendo estos últimos en los que se enfoca la propuesta de tesis. El principal problema es que el ecosistema de desarrollo en HDL (\textit{hardware description language}) es común que los componentes individuales no sean transparentes, es decir no exista documentación con detalles sobre el diseño e implementacion de los circuitos. La propuesta de está tesis es diseñar un circuito generador de reloj ya sea en forma analógica o digital en HDL para uso general y de acceso libre. El avance de las microtecnologías ha provocado que para concretar el diseño de un SoC sea necesario usar un HDL${}^3$ como verilog para describir el comportamiento del sistema en lugar de diseñar creando diagramas esquemáticos.\\
+    En los SoC los relojes usualmente se implementa usando osciladores externos generadores de reloj \textit{On-chip} o haciendo uso de PLL's${}^1$ siendo estos últimos en los que se enfoca la propuesta de tesis. El principal problema es que el ecosistema de desarrollo en HDL (\textit{hardware description language}) es común que los componentes individuales no sean transparentes, es decir no exista documentación con detalles sobre el diseño e implementación de los circuitos. La propuesta de está tesis es diseñar un circuito generador de reloj ya sea en forma analógica o digital en HDL para uso general y de acceso libre. El avance de las microtecnologías ha provocado que para concretar el diseño de un SoC sea necesario usar un HDL${}^3$ como verilog para describir el comportamiento del sistema en lugar de diseñar creando diagramas esquemáticos.\\
 
    Un PLL se evalúa principalmente con dos métricas: \textit{jitter} y \textit{Phase noise} (Ruido de fase)${}^4$. Como la finalidad del PLL es fungir como reloj, a estas métricas se le añade la frecuencia máxima. El jitter, ocasionalmente referido como \textit{time interval error}, es una medida estadística de la desviación entre los flancos de la señal cuadrada ideal comparado con la señal real. Al ser una medida estadística se necesita de un muestreo a partir del cual se caracteriza al jitter y poder calcular, por ejemplo; la desviación máxima, el promedio aritmético de la desviación y la desviación del promedio. Por otro, el ruido de fase es una varianza en la magnitud horizontal de la onda. A diferencia del ruido aditivo el cual solo afecta a la amplitud de la onda, la varianza horizontal puede cambiar el periodo de la señal deseada.
 
@@ -81,14 +81,14 @@ Un procesador es un circuito encargado de ejecutar instrucciones y procesar dato
 
     De la arquitectura base se desprenden implementaciones como en ${}^7$ la cual añade; para la implementación de un SoC, un control de voltaje antes del \textit{VCO} para disminuir el efecto del ruido generado por todos los componentes digitales existentes en el chip. Aumentando el consumo de energía pero reduciendo el jitter.
 
-    Cada problema que necesite una implementación requiere especificaciones diferentes. Sera trabajo de la tesis definir si el reloj estará enfocado a un uso especifico o a uno más general y bajo que condiciones otra tecnología se adaptaría mejor al problema. Una de los factores que afectan el rendimiento del reloj en un SoC es la distribución del mismo, al trabajar con frecuencias muy altas la frecuencia llega con un desface diferente en cada dispositivo, es por eso que hay distintas arquitecturas para la correcta distribuccion de la señal de reloj, por ejemplo: \textit{ring clock},\textit{tree-clock} y \textit{mesh clock}. Es trabajo de la tesis saber con que arquitectura se acomoda mejor el reloj diseñado\\
+    Cada problema que necesite una implementación requiere especificaciones diferentes. Sera trabajo de la tesis definir si el reloj estará enfocado a un uso especifico o a uno más general y bajo que condiciones otra tecnología se adaptaría mejor al problema. Una de los factores que afectan el rendimiento del reloj en un SoC es la distribución del mismo, al trabajar con frecuencias muy altas la frecuencia llega con un desface diferente en cada dispositivo, es por eso que hay distintas arquitecturas para la correcta distribución de la señal de reloj, por ejemplo: \textit{ring clock},\textit{tree-clock} y \textit{mesh clock}. Es trabajo de la tesis saber con que arquitectura se acomoda mejor el reloj diseñado\\
 
 
 \section{Características y generalidades}
 
 Cada implementación de un SoC está caracterizado por un conjunto de restricciones, como lo es el tamaño del chip, el consumo energético y la frecuencia a la que debe trabajar el sistema. Dichas restricciones pueden ser parte del problema o consecuencia de los componentes individuales a usar. En lo que concierne al reloj; ademas de las métricas ya mencionadas, es necesario pensar en la distribución de todos los componentes que del SoC para asegurar que la señal llegue en sincronía a cada elemento que lo conforma.\\
 
-Para poder cumplir con las métricas necesarias del reloj se han desarrollado las técnicas ya mencionadas, las cuales son: ADPLL, SSPLL, ILPLL y MDLL. También ha sido necesario desarrollar en la arquitectura necesaria para llevar la señal de reloj a cada componente del SoC, como las ya mencionadas: ring clock, tree clock y mesh clock. Es prudente mencionar que algunas técnicas de PLL se integran mejor a arquitecturas especificas, como lo es el SSPLL con el ring clock . El entregable propuesto es el diseño de un PLL y su implementación en una arquitectura SoC pensando en las necesidades más generales de un sistema: integración de cpu , memoria y puertos perifericos, bajo consumo de energía, bajo costo de producción, tamaño reducido y respuesta en tiempo real. 
+Para poder cumplir con las métricas necesarias del reloj se han desarrollado las técnicas ya mencionadas, las cuales son: ADPLL, SSPLL, ILPLL y MDLL. También ha sido necesario desarrollar en la arquitectura necesaria para llevar la señal de reloj a cada componente del SoC, como las ya mencionadas: ring clock, tree clock y mesh clock. Es prudente mencionar que algunas técnicas de PLL se integran mejor a arquitecturas especificas, como lo es el SSPLL con el ring clock . El entregable propuesto es el diseño de un PLL y su implementación en una arquitectura SoC pensando en las necesidades más generales de un sistema: integración de cpu , memoria y puertos periféricos, bajo consumo de energía, bajo costo de producción, tamaño reducido y respuesta en tiempo real. 
 
 La relevancia de dicho trabajo radica en la necesidad de generar el conocimiento de cómo diseñar SoC's, siendo la integración del reloj el primer paso del proceso. Dicha integración implica un estudio para relacionar las necesidades del SoC con el diseño del PLL. 
 
@@ -99,10 +99,10 @@ La relevancia de dicho trabajo radica en la necesidad de generar el conocimiento
 \subsection{Objetivo General:}
 \paragraph{Diseñar un circuito generador de reloj para microprocesador basado en un PLL.}
 \subsection{Objetivos específicos:}
-\paragraph{Investigar las diferentes tecnologías en el disen˜o de PLL e identificar sus ventajas y desventajas}
+\paragraph{Investigar las diferentes tecnologías en el diseño de PLL e identificar sus ventajas y desventajas}
 \paragraph{Hacer un estudio comparativo de circuitos PLL analógicos y digitales.}
 \paragraph{Investigar arquitecturas para integrar un reloj en circuitos SoC e identificar sus casos de uso}
-\paragraph{Integrar la sen˜al del reloj con otros periféricos o circuitos, por ejemplo el procesador lagarto}
+\paragraph{Integrar la señal del reloj con otros periféricos o circuitos, por ejemplo el procesador lagarto}
 \paragraph{Caracterizar el circuito de reloj, midiendo su frecuencia máxima, jitter y ruido de fase}
 
 
@@ -119,7 +119,7 @@ La relevancia de dicho trabajo radica en la necesidad de generar el conocimiento
 \item Capítulo 2
 \begin{itemize}
     \item Estado del arte
-    \item Nuevas tecnologias en el diseño de PLL's
+    \item Nuevas tecnologías en el diseño de PLL's
     \item \textbf{ADPLL}
     \item \textbf{SSPLL}
     \item \textbf{ILPLL}
@@ -131,7 +131,7 @@ La relevancia de dicho trabajo radica en la necesidad de generar el conocimiento
 \end{itemize}
 \item Capítulo 4
 \begin{itemize}
-    \item Diseño del circuito PLL analogico
+    \item Diseño del circuito PLL analógico
 \end{itemize}
 \item Capítulo 5
 \begin{itemize}
@@ -159,7 +159,7 @@ Al finalizar la tesis, el alumno deberá ser capas de; dado un problema, identif
 
 \section{Plan de trabajo y cronograma}
 
-Enumere y describa sucintamente las acciones y actividades quededicadodesarrollará para lograr los objetivos propuestos, así como los productos que se generarán como fruto del desarrollo de las actividades. 
+Enumere y describa sucintamente las acciones y actividades que desarrollará para lograr los objetivos propuestos, así como los productos que se generarán como fruto del desarrollo de las actividades. 
 \begin{table}
 \begin{center}
 \begin{tabular}{|p{2cm}|p{5cm}|p{5cm}|} 
@@ -172,8 +172,8 @@ Consecutivo & Actividades o acciones a desarrollar & Productos Esperados\\
 1& Hacer un estudio de las técnicas existentes para implementar circuitos PLL & Una tabla comparativa con las ventajas, desventajas y especificaciones de cada circuito \\\hline
 2&Diseñar las versiones digital y analógica del circuito PLL & Diseño conceptual de cada reloj \\\hline
 3&Utilizar software de diseño y simulación para obtener las versiones de los circuitos PLL & Diseños en HDL de los circuitos\\\hline
-4&Implementar el PLL en una placa de desarrollo & Un PLL funcional integrado a una placa de desarollo \\\hline
-5&Obtener el lay-out de los circuitos propuestos & Diseño del PLL en una placa fisica \\\hline
+4&Implementar el PLL en una placa de desarrollo & Un PLL funcional integrado a una placa de desarrollo \\\hline
+5&Obtener el lay-out de los circuitos propuestos & Diseño del PLL en una placa física \\\hline
 6&Hacer análisis de los circuitos obtenidos & Conclusiones preliminares de la tesis\\\hline
 7&Escritura de la tesis & La tesis \\\hline
 8&Presentación del examen de puerta cerrada. & Evaluación de las conclusiones mostradas en la tesis \\\hline
