@@ -30,7 +30,7 @@
 \begin{document}
 
 \title{
-    Generadores de Señales de Reloj Para Procesadores SoC
+    Circuito PLL (Phase Locked Loop) para generar señales de reloj en microprocesadores.
 }
 
 \author{
@@ -54,29 +54,24 @@
 \maketitle
 
 \begin{abstract} 
-    Las señales de reloj son fundamentales para el funcionamiento de todos los procesadores. Este trabajo explora la creacion de una señal de reloj digital utilizando un \textit{Phase-lock loop} \textbf{(PLL)}. 
-
-    El area de \textit{System on Chip} \textbf{(SoC)} es un campo muy cerrado, pero es un campo muy amplio y requerido para distintas aplicaciones. Por lo que uno de los objetivos del presente trabajo es diseñar el PLL en un lenguaje de descripción de hardware para generar una referencia de dichas tecnologias.
+Las señales de reloj son fundamentales para el funcionamiento de todos los procesadores y periféricos asociados para formar sistemas en un solo chip. Este trabajo explora el diseño de un circuito generador de reloj digital utilizando un Phase-locked loop (PLL) por las ventajas que ofrece utilizar este tipo de circuitos en sistemas con microprocesador. En el laboratorio de Microtecnología y Sistemas Embebidos del CIC –IPN, se ha trabajado durante los últimos años en la creación de un microprocesador denominado Lagarto, es por ello que se hace necesario contar con el soporte para sincronizar los circuitos que forman a dicho procesador, por lo que uno de los objetivos del presente trabajo es diseñar un circuito PLL, analizando las versiones analógicas y digitales del mismo con el propósito de elegir la mejor opción
 
     \keywords{FPGA, SoC, Sistemas Embebidos, Microprocesadores, PLL, Microtecnologias}
 \end{abstract}
 
 \section{Introducción}
 
-Un procesador es un circuito integrado encargado de ejecutar instrucciones y procesar datos en un sistema informático. Se le llama SoC a un dispositivo que integra todos los componentes esenciales de un sistema, por ejemplo; memoria, controladores, procesador y otros bloques funcionales. El avance de las microtecnologías ha echo que para concretar el diseño de un SoC sea necesario usar un \textit{hardware description language} \textbf{(HDL)}${}^3$ para describir el comportamiento del sistema en lugar de describir la circuitería necesaria.
+Un procesador es un circuito encargado de ejecutar instrucciones y procesar datos en un sistema informático. Se le llama SoC (\textit{System On Chip}) a un dispositivo que integra todos los componentes esenciales de un sistema, por ejemplo: memoria, controladores, procesador y otros bloques funcionales. El reloj es uno de los componente principales en le diseño de SoC's. El reloj se encarga de generar señales periódicas estables, esenciales para coordinar todos los componentes del sistema. La linea de investigación de la propuesta de tesis está encaminada al desarrollo de un reloj integrable a un SoC.\\
 
-    El reloj es uno de los componente principales en le diseño de SoC's. El reloj se encarga de generar señales periódicas estables esenciales para coordinar todos los componentes del sistema. La linea de investigación de la propuesta de tesis está encaminada al desarrollo de un reloj integrable a un SoC.\\
 
-    En los SoC los relojes usualmente se implementa usando sensores \textit{On-chip}, generadores de reloj \textit{On-chip}${}^1$ o haciendo uso de PLL's siendo estos últimos en los que se enfoca la propuesta de tesis. El principal problema es que el ecosistema de desarrollo en HDL es muy cerrado y es común que los componentes individuales no sean transparentes. La propuesta de está tesis es \textbf{crear un diseño de reloj en HDL} para uso general y de acceso libre.\\
 
-   Un PLL se evalúa principalmente con dos metricas: \textit{jitter} y \textit{Phase noise} (Ruido de fase)${}^4$. Como la finalidad del PLL es fungir como reloj, a estas metricas se le añade la frecuencia maxima.
-    El jitter; ocasionalmente referido como \textit{time interval error}, es una medida estadística de la desviación entre los flancos de la señal cuadrada ideal comparado con la señal real. Al ser una medida estadística se necesita de un muestreo a partir del cual se caracteriza al jitter y poder calcular, por ejemplo; la desviación máxima, el promedio aritmético de la desviación y la desviación del promedio. Por otro, el ruido de fase es una varianza en la magnitud horizontal de la onda. A diferencia del ruido aditivo el cual solo afecta a la amplitud de la onda, la varianza horizontal puede cambiar el periodo de la señal deseada.
+    En los SoC los relojes usualmente se implementa usando osciladores externos generadores de reloj \textit{On-chip} o haciendo uso de PLL's${}^1$ siendo estos últimos en los que se enfoca la propuesta de tesis. El principal problema es que el ecosistema de desarrollo en HDL (\textit{hardware description language}) es común que los componentes individuales no sean transparentes, es decir no exista documentación con detalles sobre el diseño e implementacion de los circuitos. La propuesta de está tesis es diseñar un circuito generador de reloj ya sea en forma analógica o digital en HDL para uso general y de acceso libre. El avance de las microtecnologías ha provocado que para concretar el diseño de un SoC sea necesario usar un HDL${}^3$ como verilog para describir el comportamiento del sistema en lugar de diseñar creando diagramas esquemáticos.\\
 
-    En un articulo publicado en el 2022${}^5$ se reseñaron en total 144 publicaciones de la \textit{ISSCC} y \textit{VLSI}, dando como resultado que 38\% de las publicaciones hablan de \textit{ADPLL}, 15\% sobre \textit{SSPLL},18\% de \textit{ILPLL} , 7\% de \textit{MDLL} y el 22\% restante de otros diseños.
-    Uno de los resultados que se obtuvo en el articulo mencionado es que los avances en el diseño de PLL se pueden dividir en 3 categorías: aumentar la frecuencia conservando el consumo de energía, aumentar la frecuencia manteniendo la relación de frecuencia-consumo de energía, aumentar la frecuencia manteniendo el jitter normalizado\\
+   Un PLL se evalúa principalmente con dos métricas: \textit{jitter} y \textit{Phase noise} (Ruido de fase)${}^4$. Como la finalidad del PLL es fungir como reloj, a estas métricas se le añade la frecuencia máxima. El jitter, ocasionalmente referido como \textit{time interval error}, es una medida estadística de la desviación entre los flancos de la señal cuadrada ideal comparado con la señal real. Al ser una medida estadística se necesita de un muestreo a partir del cual se caracteriza al jitter y poder calcular, por ejemplo; la desviación máxima, el promedio aritmético de la desviación y la desviación del promedio. Por otro, el ruido de fase es una varianza en la magnitud horizontal de la onda. A diferencia del ruido aditivo el cual solo afecta a la amplitud de la onda, la varianza horizontal puede cambiar el periodo de la señal deseada.
+
+    En un articulo publicado en el 2022${}^5$ se reseñaron en total 144 publicaciones de la ISSCC y VLSI, dando como resultado que 38\% de las publicaciones hablan de ADPLL (\textit{All-Digital PLL}), 15\% sobre SSPLL (\textit{Sub Sampling PLL}),18\% de ILPLL (\textit{Injection Locked PLL}) , 7\% de MDLL (\textit{multiplying delay-locked PLL}) y el 22\% restante de otros diseños. Uno de los resultados que se obtuvo en el articulo mencionado es que los avances en el diseño de PLL se pueden dividir en 3 categorías: aumentar la frecuencia conservando el consumo de energía, aumentar la frecuencia manteniendo la relación de frecuencia-consumo de energía, aumentar la frecuencia manteniendo el jitter normalizado\\
 
     Existen muchas implementaciones de PLL, pero los componentes fundamentales son; el \textit{Error detector} compuesto por un detector de frecuencia de fase y un regulador de voltaje, un \textit{Loop Filter} para suavizar la señal de error generado por el \textit{Error detector}, un \textit{Voltage-controlled oscillator} (\textbf{VCO}) encargado de ajustar la frecuencia en función de la señal de error del \textit{Error detector} para compararla con la señal deseada y un \textit{feedback divider} encargado de regular la señal del \textit{VCO} para que este en la misma fase y frecuencia que la señal de referencia.\\ 
-
 
 \begin{figure}[t]
 \includegraphics[width=8cm]{PLL.png}
@@ -93,7 +88,7 @@ Un procesador es un circuito integrado encargado de ejecutar instrucciones y pro
 
 Cada implementación de un SoC está caracterizado por un conjunto de restricciones, como lo es el tamaño del chip, el consumo energético y la frecuencia a la que debe trabajar el sistema. Dichas restricciones pueden ser parte del problema o consecuencia de los componentes individuales a usar. En lo que concierne al reloj; ademas de las métricas ya mencionadas, es necesario pensar en la distribución de todos los componentes que del SoC para asegurar que la señal llegue en sincronía a cada elemento que lo conforma.\\
 
-Para poder cumplir con las métricas necesarias del reloj se han desarollado las tecnicas ya mencionadas, las cuales son: \textit{ADPLL}, \textit{SSPLL}, \textit{ILPLL} y \textit{MDLL}. También ha sido necesario desarrollar en la arquitectura necesaria para llevar la señal de reloj a cada componente del SoC, como las ya mencionadas: \textit{ring clock}, \textit{tree clock} y {mesh clock}. Es prudente mencionar que algunas técnicas de PLL se integran mejor a arquitecturas especificas, como lo es el SSPLL con el \textit{ring clock} . El entregable propuesto es el diseño de un PLL y su implementación en una arquitectura SoC pensando en las necesidades más generales de un sistema: integración de cpu , memoria y puertos perifericos, bajo consumo de energía, bajo costo de producción, tamaño reducido y respuesta en tiempo real. 
+Para poder cumplir con las métricas necesarias del reloj se han desarrollado las técnicas ya mencionadas, las cuales son: ADPLL, SSPLL, ILPLL y MDLL. También ha sido necesario desarrollar en la arquitectura necesaria para llevar la señal de reloj a cada componente del SoC, como las ya mencionadas: ring clock, tree clock y mesh clock. Es prudente mencionar que algunas técnicas de PLL se integran mejor a arquitecturas especificas, como lo es el SSPLL con el ring clock . El entregable propuesto es el diseño de un PLL y su implementación en una arquitectura SoC pensando en las necesidades más generales de un sistema: integración de cpu , memoria y puertos perifericos, bajo consumo de energía, bajo costo de producción, tamaño reducido y respuesta en tiempo real. 
 
 La relevancia de dicho trabajo radica en la necesidad de generar el conocimiento de cómo diseñar SoC's, siendo la integración del reloj el primer paso del proceso. Dicha integración implica un estudio para relacionar las necesidades del SoC con el diseño del PLL. 
 
@@ -153,7 +148,7 @@ La relevancia de dicho trabajo radica en la necesidad de generar el conocimiento
 \itemsep8pt\relax
 \renewcommand\labelitemi{{\lower1.5pt\hbox{\Large$\circ$}}}
 
-     \item Un reloj es necesario para implementar un sistema embebido y actualmente el laboratorio de Microse no cuenta con el diseño de uno
+     \item Un reloj es necesario para implementar un sistema dedicado y actualmente el laboratorio de Microse no cuenta con el diseño de uno
 
      \item Una de las tendencias es el diseño de relojes totalmente digitales(\textit{ADPLL}), dedicarle tiempo a investigar esta tecnología ayuda al laboratorio a estar actualizado con los avances en el campo.
 
@@ -164,7 +159,7 @@ Al finalizar la tesis, el alumno deberá ser capas de; dado un problema, identif
 
 \section{Plan de trabajo y cronograma}
 
-Enumere y describa sucintamente las acciones y actividades que desarrollará para lograr los objetivos propuestos, así como los productos que se generarán como fruto del desarrollo de las actividades. 
+Enumere y describa sucintamente las acciones y actividades quededicadodesarrollará para lograr los objetivos propuestos, así como los productos que se generarán como fruto del desarrollo de las actividades. 
 \begin{table}
 \begin{center}
 \begin{tabular}{|p{2cm}|p{5cm}|p{5cm}|} 
